@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Mic, MicOff, Send, Calendar, Car, UtensilsCrossed, Mail, MapPin, CreditCard, Plus, Bell, Settings, Sun, Moon } from 'lucide-react';
+import { Mic, MicOff, Send, Calendar, Car, UtensilsCrossed, Mail, MapPin, CreditCard, Plus, Bell, Settings, Sun, Moon, Link2 } from 'lucide-react';
+import IntegrationsPage from './IntegrationsPage';
 
 interface TaskItem {
   id: string;
@@ -25,6 +26,7 @@ export default function Dashboard() {
   const [reply, setReply] = useState('');
   const [recognizing, setRecognizing] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
+  const [currentView, setCurrentView] = useState<'dashboard' | 'integrations'>('dashboard');
   const [tasks, setTasks] = useState<TaskItem[]>([
     {
       id: '1',
@@ -111,6 +113,15 @@ export default function Dashboard() {
     }
   };
 
+  if (currentView === 'integrations') {
+    return (
+      <IntegrationsPage
+        onBack={() => setCurrentView('dashboard')}
+        darkMode={darkMode}
+      />
+    );
+  }
+
   return (
     <div className={`min-h-screen transition-colors duration-300 ${
       darkMode ? 'bg-surface-dark text-white' : 'bg-surface-light text-gray-900'
@@ -128,6 +139,14 @@ export default function Dashboard() {
           </div>
           
           <div className="flex items-center space-x-3">
+            <button
+              onClick={() => setCurrentView('integrations')}
+              className={`p-2 rounded-lg transition-colors ${
+                darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
+              }`}
+            >
+              <Link2 className="w-5 h-5" />
+            </button>
             <button
               onClick={() => setDarkMode(!darkMode)}
               className={`p-2 rounded-lg transition-colors ${
