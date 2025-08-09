@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Mic, MicOff, Send, Calendar, Car, UtensilsCrossed, Mail, MapPin, CreditCard, Plus, Bell, Settings, Sun, Moon, Link2 } from 'lucide-react';
 import IntegrationsPage from './IntegrationsPage';
+import QuickActionModal from './QuickActionModal';
 
 interface TaskItem {
   id: string;
@@ -27,6 +28,8 @@ export default function Dashboard() {
   const [recognizing, setRecognizing] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [currentView, setCurrentView] = useState<'dashboard' | 'integrations'>('dashboard');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedAction, setSelectedAction] = useState<typeof QUICK_ACTIONS[0] | null>(null);
   const [tasks, setTasks] = useState<TaskItem[]>([
     {
       id: '1',
@@ -236,6 +239,10 @@ export default function Dashboard() {
             {QUICK_ACTIONS.map((action, index) => (
               <button
                 key={action.label}
+                onClick={() => {
+                  setSelectedAction(action);
+                  setModalOpen(true);
+                }}
                 className={`p-4 rounded-xl ${action.color} hover:scale-105 transition-all duration-200 text-white shadow-soft`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >
@@ -310,6 +317,17 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Quick Action Modal */}
+      <QuickActionModal
+        isOpen={modalOpen}
+        onClose={() => {
+          setModalOpen(false);
+          setSelectedAction(null);
+        }}
+        action={selectedAction}
+        darkMode={darkMode}
+      />
     </div>
   );
 }
