@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Mic, MicOff, Send, Calendar, Car, UtensilsCrossed, Mail, MapPin, CreditCard, Plus, Bell, Settings, Sun, Moon, Link2 } from 'lucide-react';
 import IntegrationsPage from './IntegrationsPage';
 import QuickActionModal from './QuickActionModal';
