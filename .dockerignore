@@ -1,0 +1,14 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.DS_Store
+dist
+.next
+coverage
+apps/**/node_modules
+apps/**/dist
+apps/**/.next
+apps/**/coverage
+apps/backend/prisma/*.db
+

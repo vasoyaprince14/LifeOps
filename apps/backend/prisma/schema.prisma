@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  name      String?
+  passwordHash String?
+
+  // For MVP preferences and automation flags
+  timezone       String? @default("UTC")
+  automationMode Boolean  @default(false)
+
+  tasks Task[]
+  integrationAccounts IntegrationAccount[]
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  title       String
+  description String?
+  status      TaskStatus @default(PENDING)
+  scheduledAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model IntegrationAccount {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  userId       String
+  provider     Provider
+  accessToken  String
+  refreshToken String?
+  expiresAt    DateTime?
+  scope        String?
+  metadata     Json?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
+}
+
+enum Provider {
+  GOOGLE
+  UBER
+  ZOMATO
+  SWIGGY
+  ZEPTO
+}
+enum TaskStatus {
+  PENDING
+  SCHEDULED
+  COMPLETED
+  CANCELED
+}
+
